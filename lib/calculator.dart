@@ -15,6 +15,8 @@ class Calculator extends StatefulWidget{
 
 class _CalculatorState extends State<Calculator> {
 
+  void editInputField(int num) => setState(() => widget.userInput.text += num.toString());
+
   @override
   Widget build(BuildContext context){
     return MaterialApp(
@@ -44,33 +46,33 @@ class _CalculatorState extends State<Calculator> {
               ],
             ),
             Row(
-              children: const [
-                NumberButton(7),
-                NumberButton(8),
-                NumberButton(9),
+              children: [
+                NumberButton(7, editInputField),
+                NumberButton(8, editInputField),
+                NumberButton(9, editInputField),
                 OperButton(Operations("x")),
               ],
             ),
             Row(
-              children: const [
-                NumberButton(4),
-                NumberButton(5),
-                NumberButton(6),
+              children: [
+                NumberButton(4, editInputField),
+                NumberButton(5, editInputField),
+                NumberButton(6, editInputField),
                 OperButton(Operations("-")),
               ],
             ),
             Row(
-              children: const [
-                NumberButton(1),
-                NumberButton(2),
-                NumberButton(3),
+              children: [
+                NumberButton(1, editInputField),
+                NumberButton(2, editInputField),
+                NumberButton(3, editInputField),
                 OperButton(Operations("+")),
               ],
             ),
             Row(
-              children: const [
+              children: [
                 OperButton(Operations("+/-")),
-                NumberButton(0),
+                NumberButton(0, editInputField),
                 OperButton(Operations(".")),
                 OperButton(Operations("=")),
               ],
