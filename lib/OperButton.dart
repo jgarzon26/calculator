@@ -3,16 +3,17 @@ import 'Operations.dart';
 
 class OperButton extends StatelessWidget{
 
-  final Operations operations;
+  final String operator;
+  final void Function(String oper) onInput;
 
-  const OperButton(this.operations, {super.key});
+  const OperButton(this.operator, this.onInput, {super.key});
 
   @override
   Widget build(BuildContext context){
     return ElevatedButton(
-      onPressed: null,
+      onPressed: () => onInput(operator),
       child: Text(
-        operations.operator,
+        operator,
       )
     );
   }

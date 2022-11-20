@@ -15,7 +15,8 @@ class Calculator extends StatefulWidget{
 
 class _CalculatorState extends State<Calculator> {
 
-  void editInputField(int num) => setState(() => widget.userInput.text += num.toString());
+  void addNumberInInputField(int num) => setState(() => widget.userInput.text += num.toString());
+  void addOperatorInInputField(String oper) => setState(() => widget.userInput.text += oper);
 
   @override
   Widget build(BuildContext context){
@@ -38,43 +39,43 @@ class _CalculatorState extends State<Calculator> {
               enabled: false,
             ),
             Row(
-              children: const [
-                OperButton(Operations("C")),
-                OperButton(Operations("(")),
-                OperButton(Operations(")")),
-                OperButton(Operations("÷")),
+              children: [
+                //OperButton(Operations("C")),
+                //OperButton(Operations("(")),
+                //OperButton(Operations(")")),
+                OperButton("÷", addOperatorInInputField),
               ],
             ),
             Row(
               children: [
-                NumberButton(7, editInputField),
-                NumberButton(8, editInputField),
-                NumberButton(9, editInputField),
-                OperButton(Operations("x")),
+                NumberButton(7, addNumberInInputField),
+                NumberButton(8, addNumberInInputField),
+                NumberButton(9, addNumberInInputField),
+                OperButton("x", addOperatorInInputField),
               ],
             ),
             Row(
               children: [
-                NumberButton(4, editInputField),
-                NumberButton(5, editInputField),
-                NumberButton(6, editInputField),
-                OperButton(Operations("-")),
+                NumberButton(4, addNumberInInputField),
+                NumberButton(5, addNumberInInputField),
+                NumberButton(6, addNumberInInputField),
+                OperButton("-", addOperatorInInputField),
               ],
             ),
             Row(
               children: [
-                NumberButton(1, editInputField),
-                NumberButton(2, editInputField),
-                NumberButton(3, editInputField),
-                OperButton(Operations("+")),
+                NumberButton(1, addNumberInInputField),
+                NumberButton(2, addNumberInInputField),
+                NumberButton(3, addNumberInInputField),
+                OperButton("+", addOperatorInInputField),
               ],
             ),
             Row(
               children: [
-                OperButton(Operations("+/-")),
-                NumberButton(0, editInputField),
-                OperButton(Operations(".")),
-                OperButton(Operations("=")),
+                //OperButton(Operations("+/-")),
+                NumberButton(0, addNumberInInputField),
+                //OperButton(Operations(".")),
+                //OperButton(Operations("=")),
               ],
             )
           ],
