@@ -5,7 +5,10 @@ import 'NumberButton.dart';
 
 class Calculator extends StatefulWidget{
 
-  const Calculator({super.key});
+  final userInput = TextEditingController();
+  final result = TextEditingController();
+
+  Calculator({super.key});
   @override
   State<Calculator> createState() => _CalculatorState();
 }
@@ -21,6 +24,17 @@ class _CalculatorState extends State<Calculator> {
         ),
         body: Column(
           children: [
+            TextField(
+              controller: widget.userInput,
+              keyboardType: TextInputType.none,
+              textAlign: TextAlign.right,
+            ),
+            TextField(
+              controller: widget.result,
+              keyboardType: TextInputType.none,
+              textAlign: TextAlign.right,
+              enabled: false,
+            ),
             Row(
               children: const [
                 OperButton(Operations("C")),
