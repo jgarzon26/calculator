@@ -23,7 +23,6 @@ class _CalculatorState extends State<Calculator> {
 
   final _userInput = TextEditingController(text: "0");
   final _result = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
 
   void addNumberInInputField(int num) {
     setState(() => _userInput.text += num.toString());
@@ -32,10 +31,29 @@ class _CalculatorState extends State<Calculator> {
     setState(() => _userInput.text += oper);
   }
 
-  num getResultFromString(String expression){
-    expression = expression.replaceAll("x", "*");
-    expression = expression.replaceAll("÷", "/");
-    return expression.interpret();
+  void _getResultFromString(){
+    var expression = _userInput.text;
+    var matchFound = false;
+    for(var v in _listOfOperators.values){
+      if(expression.endsWith(v)){
+        matchFound = true;
+        break;
+      }
+    }
+
+    if(expression.isNotEmpty && !matchFound){
+      expression = expression.replaceAll("x", "*");
+      expression = expression.replaceAll("÷", "/");
+      var result =  expression.interpret();
+      setState(() => _result.text = result.toString());
+    }
+  }
+
+  @override
+  void initState(){
+    super.initState();
+
+    _userInput.addListener(() => _getResultFromString());
   }
 
   @override
@@ -46,23 +64,12 @@ class _CalculatorState extends State<Calculator> {
           title: Text("Calculator",),
         ),
         body: Form(
-          key: _formKey,
           child: Column(
             children: [
               TextFormField(
                 controller: _userInput,
                 keyboardType: TextInputType.none,
                 textAlign: TextAlign.right,
-                validator: (value) {
-                  if(value != null){
-                    for(var v in _listOfOperators.values){
-                      if(value.endsWith(v)){
-                        return "null";
-                      }
-                    }
-                  }
-                  return null;
-                },
               ),
               TextField(
                 controller: _result,
@@ -115,11 +122,7 @@ class _CalculatorState extends State<Calculator> {
                   //OperButton(Operations(".")),
                   ElevatedButton(
                     onPressed: () {
-                      var expression = _userInput.text;
-                      if(_formKey.currentState!.validate()){
-                        var result = getResultFromString(expression);
-                        setState(() => _result.text = result.toString());
-                      }
+                      _getResultFromString();
                     },
                     child: Text("=",),
                   ),
