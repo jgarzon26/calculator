@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:calculator/OperButton.dart';
 import 'package:flutter/material.dart';
 import 'NumberButton.dart';
+import 'package:function_tree/function_tree.dart';
 
 class Calculator extends StatefulWidget{
 
@@ -44,7 +47,10 @@ class _CalculatorState extends State<Calculator> {
             Row(
               children: [
                 ElevatedButton(
-                  onPressed: () => setState(() => widget.userInput.clear()),
+                  onPressed: () => setState(() {
+                    widget.userInput.clear();
+                    widget.result.clear();
+                  }),
                   child: Text("C",),
                 ),
                 //OperButton(Operations("(")),
@@ -82,7 +88,14 @@ class _CalculatorState extends State<Calculator> {
                 NumberButton(0, addNumberInInputField),
                 //OperButton(Operations(".")),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    var expression = widget.userInput.text;
+                    expression = expression.replaceAll("x", "*");
+                    expression = expression.replaceAll("÷", "/");
+                    log(expression.toString());
+                    var result = expression.interpret();
+                    setState(() => widget.result.text = result.toString());
+                  },
                   child: Text("=",),
                 ),
               ],
