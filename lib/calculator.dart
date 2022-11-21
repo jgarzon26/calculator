@@ -5,6 +5,13 @@ import 'package:flutter/material.dart';
 import 'NumberButton.dart';
 import 'package:function_tree/function_tree.dart';
 
+const listOfOperators = {
+  "add" : "+",
+  "subtract" : "-",
+  "multiply" : "x",
+  "divide" : "÷",
+};
+
 class Calculator extends StatefulWidget{
 
   final userInput = TextEditingController();
@@ -55,7 +62,7 @@ class _CalculatorState extends State<Calculator> {
                 ),
                 //OperButton(Operations("(")),
                 //OperButton(Operations(")")),
-                OperButton("÷", addOperatorInInputField),
+                OperButton(listOfOperators['divide']!, addOperatorInInputField),
               ],
             ),
             Row(
@@ -63,7 +70,7 @@ class _CalculatorState extends State<Calculator> {
                 NumberButton(7, addNumberInInputField),
                 NumberButton(8, addNumberInInputField),
                 NumberButton(9, addNumberInInputField),
-                OperButton("x", addOperatorInInputField),
+                OperButton(listOfOperators['multiply']!, addOperatorInInputField),
               ],
             ),
             Row(
@@ -71,7 +78,7 @@ class _CalculatorState extends State<Calculator> {
                 NumberButton(4, addNumberInInputField),
                 NumberButton(5, addNumberInInputField),
                 NumberButton(6, addNumberInInputField),
-                OperButton("-", addOperatorInInputField),
+                OperButton(listOfOperators['subtract']!, addOperatorInInputField),
               ],
             ),
             Row(
@@ -79,7 +86,7 @@ class _CalculatorState extends State<Calculator> {
                 NumberButton(1, addNumberInInputField),
                 NumberButton(2, addNumberInInputField),
                 NumberButton(3, addNumberInInputField),
-                OperButton("+", addOperatorInInputField),
+                OperButton(listOfOperators['add']!, addOperatorInInputField),
               ],
             ),
             Row(
@@ -92,7 +99,6 @@ class _CalculatorState extends State<Calculator> {
                     var expression = widget.userInput.text;
                     expression = expression.replaceAll("x", "*");
                     expression = expression.replaceAll("÷", "/");
-                    log(expression.toString());
                     var result = expression.interpret();
                     setState(() => widget.result.text = result.toString());
                   },
