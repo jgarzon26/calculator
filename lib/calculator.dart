@@ -1,5 +1,4 @@
 import 'package:calculator/OperButton.dart';
-import 'package:calculator/Operations.dart';
 import 'package:flutter/material.dart';
 import 'NumberButton.dart';
 
@@ -15,8 +14,12 @@ class Calculator extends StatefulWidget{
 
 class _CalculatorState extends State<Calculator> {
 
-  void addNumberInInputField(int num) => setState(() => widget.userInput.text += num.toString());
-  void addOperatorInInputField(String oper) => setState(() => widget.userInput.text += oper);
+  void addNumberInInputField(int num) {
+    setState(() => widget.userInput.text += num.toString());
+  }
+  void addOperatorInInputField(String oper) {
+    setState(() => widget.userInput.text += oper);
+  }
 
   @override
   Widget build(BuildContext context){
@@ -36,11 +39,14 @@ class _CalculatorState extends State<Calculator> {
               controller: widget.result,
               keyboardType: TextInputType.none,
               textAlign: TextAlign.right,
-              enabled: false,
+              readOnly: true,
             ),
             Row(
               children: [
-                //OperButton(Operations("C")),
+                ElevatedButton(
+                  onPressed: () => setState(() => widget.userInput.clear()),
+                  child: Text("C",),
+                ),
                 //OperButton(Operations("(")),
                 //OperButton(Operations(")")),
                 OperButton("÷", addOperatorInInputField),
@@ -75,7 +81,10 @@ class _CalculatorState extends State<Calculator> {
                 //OperButton(Operations("+/-")),
                 NumberButton(0, addNumberInInputField),
                 //OperButton(Operations(".")),
-                //OperButton(Operations("=")),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text("=",),
+                ),
               ],
             )
           ],
