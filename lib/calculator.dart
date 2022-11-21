@@ -5,6 +5,13 @@ import 'package:flutter/material.dart';
 import 'NumberButton.dart';
 import 'package:function_tree/function_tree.dart';
 
+const listOfOperators = {
+  "add" : "+",
+  "subtract" : "-",
+  "multiply" : "x",
+  "divide" : "÷",
+};
+
 class Calculator extends StatefulWidget{
 
   final userInput = TextEditingController();
