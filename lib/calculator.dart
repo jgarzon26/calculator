@@ -25,11 +25,15 @@ class _CalculatorState extends State<Calculator> {
   final _result = TextEditingController();
 
   void addNumberInInputField(int num) {
-    setState(() => _userInput.text += num.toString());
+    setState(() => _checkIfInputFieldHasValue()
+        ? _userInput.text = num.toString()
+        : _userInput.text += num.toString());
   }
   void addOperatorInInputField(String oper) {
     setState(() => _userInput.text += oper);
   }
+
+  bool _checkIfInputFieldHasValue() => _userInput.text.length == 1 && _userInput.text.startsWith("0") ? true : false;
 
   void _getResultFromString(){
     var expression = _userInput.text;
@@ -81,7 +85,7 @@ class _CalculatorState extends State<Calculator> {
                 children: [
                   ElevatedButton(
                     onPressed: () => setState(() {
-                      _userInput.clear();
+                      _userInput.text = "0";
                       _result.clear();
                     }),
                     child: Text("C",),
