@@ -50,6 +50,8 @@ class _CalculatorState extends State<Calculator> {
       expression = expression.replaceAll("÷", "/");
       var result =  expression.interpret();
       setState(() => _result.text = result.toString());
+    }else{
+      _result.clear();
     }
   }
 
@@ -81,6 +83,12 @@ class _CalculatorState extends State<Calculator> {
                 textAlign: TextAlign.right,
                 readOnly: true,
               ),
+              IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.backspace_outlined,
+                  ),
+              ),
               Row(
                 children: [
                   ElevatedButton(
@@ -90,8 +98,14 @@ class _CalculatorState extends State<Calculator> {
                     }),
                     child: Text("C",),
                   ),
-                  //OperButton(Operations("(")),
-                  //OperButton(Operations(")")),
+                  ElevatedButton(
+                      onPressed: null,
+                      child: Text("( )"),
+                  ),
+                  ElevatedButton(
+                    onPressed: null,
+                    child: Text("%"),
+                  ),
                   OperButton(_listOfOperators['divide']!, addOperatorInInputField),
                 ],
               ),
@@ -121,9 +135,15 @@ class _CalculatorState extends State<Calculator> {
               ),
               Row(
                 children: [
-                  //OperButton(Operations("+/-")),
+                  ElevatedButton(
+                    onPressed: null,
+                    child: Text("+/-"),
+                  ),
                   NumberButton(0, addNumberInInputField),
-                  //OperButton(Operations(".")),
+                  ElevatedButton(
+                      onPressed: null,
+                      child: Text(".")
+                  ),
                   ElevatedButton(
                     onPressed: () {
                       _getResultFromString();
