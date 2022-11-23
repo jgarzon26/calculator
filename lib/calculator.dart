@@ -21,35 +21,44 @@ class _CalculatorState extends State<Calculator> {
     "divide" : "÷",
   };
 
+  String _expression = "";
+
   final _userInput = TextEditingController(text: "0");
   final _result = TextEditingController();
 
   void _addNumberInInputField(int num) {
+    _expression += num.toString();
     setState(() => _checkIfInputFieldHasValue()
-        ? _userInput.text = num.toString()
-        : _userInput.text += num.toString());
+        ? _userInput.text += num.toString()
+        : _userInput.text = num.toString());
   }
   void _addOperatorInInputField(String oper) {
+    switch(oper){
+      case "x" : _expression += "*"; break;
+      case "÷" : _expression += "/"; break;
+      default: _expression += oper;
+    }
     setState(() => _userInput.text += oper);
   }
 
   bool _checkIfInputFieldHasValue() => _userInput.text.length == 1
-      && _userInput.text.startsWith("0") ? true : false;
+      && _userInput.text.startsWith("0") ? false : true;
 
   void _getResultFromString(){
-    var expression = _userInput.text;
-    var matchFound = false;
+    var expressionFromInputField = _userInput.text;
+    var isLastCharOperator = false;
     for(var v in _listOfOperators.values){
-      if(expression.endsWith(v)){
-        matchFound = true;
+      if(expressionFromInputField.endsWith(v)){
+        isLastCharOperator = true;
         break;
       }
     }
 
-    if(expression.isNotEmpty && !matchFound){
-      expression = expression.replaceAll("x", "*");
-      expression = expression.replaceAll("÷", "/");
-      var result =  expression.interpret();
+    log(_expression);
+
+    //If operator is the last char, empty result and no calculation
+    if(!isLastCharOperator){
+      var result =  _expression.interpret();
       setState(() => _result.text = result.toString());
     }else{
       _result.clear();
@@ -84,7 +93,15 @@ class _CalculatorState extends State<Calculator> {
               readOnly: true,
             ),
             IconButton(
-                onPressed: null,
+                onPressed: () {
+                  if(_checkIfInputFieldHasValue()){
+                    _userInput.text = _userInput.text.substring(0, _userInput.text.length - 1);
+                  }
+                  if(_userInput.text.isEmpty) {
+                    _userInput.text = "0";
+                    _result.clear();
+                  }
+                },
                 icon: Icon(
                   Icons.backspace_outlined,
                 ),
@@ -94,6 +111,7 @@ class _CalculatorState extends State<Calculator> {
                 ElevatedButton(
                   onPressed: () => setState(() {
                     _userInput.text = "0";
+                    _expression = "";
                     _result.clear();
                   }),
                   child: Text("C",),
@@ -103,7 +121,10 @@ class _CalculatorState extends State<Calculator> {
                     child: Text("( )"),
                 ),
                 ElevatedButton(
-                  onPressed: null,
+                  onPressed: () {
+                    _expression += "/100";
+                    setState(() => _userInput.text += "%");
+                  },
                   child: Text("%"),
                 ),
                 OperButton(_listOfOperators['divide']!, _addOperatorInInputField),
