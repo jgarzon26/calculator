@@ -54,8 +54,6 @@ class _CalculatorState extends State<Calculator> {
       }
     }
 
-    log(_expression);
-
     //If operator is the last char, empty result and no calculation
     if(!isLastCharOperator){
       var result =  _expression.interpret();
@@ -95,9 +93,11 @@ class _CalculatorState extends State<Calculator> {
             IconButton(
                 onPressed: () {
                   if(_checkIfInputFieldHasValue()){
+                    _expression = _expression.substring(0, _expression.length - 1);
                     _userInput.text = _userInput.text.substring(0, _userInput.text.length - 1);
                   }
                   if(_userInput.text.isEmpty) {
+                    _expression = "";
                     _userInput.text = "0";
                     _result.clear();
                   }
