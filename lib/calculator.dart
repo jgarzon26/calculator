@@ -14,6 +14,11 @@ class Calculator extends StatefulWidget{
 
 class _CalculatorState extends State<Calculator> {
 
+  String _expression = "";
+
+  late String _currentLastNumber;
+  bool _hasSignChange = false;
+
   final _listOfOperators = {
     "add" : "+",
     "subtract" : "-",
@@ -21,23 +26,28 @@ class _CalculatorState extends State<Calculator> {
     "divide" : "÷",
   };
 
-  String _expression = "";
-
   final _userInput = TextEditingController(text: "0");
   final _result = TextEditingController();
 
   void _addNumberInInputField(int num) {
+
+    if(_userInput.text.endsWith("%")){
+      _expression += "*";
+      _userInput.text += "${_listOfOperators["multiply"]}";
+    }
     _expression += num.toString();
     setState(() => _checkIfInputFieldHasValue()
         ? _userInput.text += num.toString()
         : _userInput.text = num.toString());
   }
   void _addOperatorInInputField(String oper) {
+    _hasSignChange = false;
     switch(oper){
       case "x" : _expression += "*"; break;
       case "÷" : _expression += "/"; break;
       default: _expression += oper;
     }
+
     setState(() => _userInput.text += oper);
   }
 
@@ -113,6 +123,7 @@ class _CalculatorState extends State<Calculator> {
                     _userInput.text = "0";
                     _expression = "";
                     _result.clear();
+                    _hasSignChange = false;
                   }),
                   child: Text("C",),
                 ),
@@ -123,6 +134,7 @@ class _CalculatorState extends State<Calculator> {
                 ElevatedButton(
                   onPressed: () {
                     _expression += "/100";
+                    _expression = _expression.interpret().toString();
                     setState(() => _userInput.text += "%");
                   },
                   child: Text("%"),
@@ -157,7 +169,34 @@ class _CalculatorState extends State<Calculator> {
             Row(
               children: [
                 ElevatedButton(
-                  onPressed: null,
+                  onPressed: () {
+                    bool hasFoundLastOperator = false;
+                    for(int i = _expression.length - 1; i > -1; i--){
+                      for(var v in _listOfOperators.values){
+                        if(_expression[i] == v || i == 0){
+                          hasFoundLastOperator = true;
+                          if(!_hasSignChange){
+                            //if there is operators add one, otherwise do nothing
+                            var n = (i == 0) ? 0 : 1;
+                            _currentLastNumber = _expression.substring(i+n);
+                            log("Before: $_expression and index: ${i+n}");
+                            _expression = _expression.replaceRange(i + n, null, "(-$_currentLastNumber)");
+                            log("After: $_expression");
+                            setState(() => _userInput.text = _expression);
+                          }else{
+
+                          }
+
+                          break;
+                        }
+                      }
+                      if(hasFoundLastOperator) {
+                        break;
+                      }
+                    }
+
+                    _hasSignChange = !_hasSignChange;
+                  },
                   child: Text("+/-"),
                 ),
                 NumberButton(0, _addNumberInInputField),
