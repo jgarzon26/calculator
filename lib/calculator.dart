@@ -18,6 +18,7 @@ class _CalculatorState extends State<Calculator> {
 
   late String _currentLastNumber;
   bool _hasSignChange = false;
+  late int _startIndexOfSignChange;
 
   final _listOfOperators = {
     "add" : "+",
@@ -71,6 +72,15 @@ class _CalculatorState extends State<Calculator> {
     }else{
       _result.clear();
     }
+  }
+
+  bool _isLastNumberNegative() => _expression.endsWith(")");
+
+  void _revertToPositive(){
+    var startIndex = _expression.lastIndexOf("(", _startIndexOfSignChange);
+    _expression = _expression.replaceRange(startIndex, null, _currentLastNumber);
+    setState(() => _userInput.text = _expression);
+    _hasSignChange = false;
   }
 
   @override
@@ -179,12 +189,12 @@ class _CalculatorState extends State<Calculator> {
                             //if there is operators add one, otherwise do nothing
                             var n = (i == 0) ? 0 : 1;
                             _currentLastNumber = _expression.substring(i+n);
-                            log("Before: $_expression and index: ${i+n}");
                             _expression = _expression.replaceRange(i + n, null, "(-$_currentLastNumber)");
-                            log("After: $_expression");
                             setState(() => _userInput.text = _expression);
+                            _hasSignChange = true;
+                            _startIndexOfSignChange = i + n;
                           }else{
-
+                            _revertToPositive();
                           }
 
                           break;
@@ -194,8 +204,6 @@ class _CalculatorState extends State<Calculator> {
                         break;
                       }
                     }
-
-                    _hasSignChange = !_hasSignChange;
                   },
                   child: Text("+/-"),
                 ),
