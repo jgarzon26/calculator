@@ -32,6 +32,10 @@ class _CalculatorState extends State<Calculator> {
 
   void _addNumberInInputField(int num) {
 
+    if(_isLastNumberNegative()){
+      _addOperatorInInputField("x");
+    }
+
     if(_userInput.text.endsWith("%")){
       _expression += "*";
       _userInput.text += "${_listOfOperators["multiply"]}";
@@ -112,6 +116,11 @@ class _CalculatorState extends State<Calculator> {
             ),
             IconButton(
                 onPressed: () {
+                  if(_isLastNumberNegative()){
+                    _revertToPositive();
+                    return;
+                  }
+
                   if(_checkIfInputFieldHasValue()){
                     _expression = _expression.substring(0, _expression.length - 1);
                     _userInput.text = _userInput.text.substring(0, _userInput.text.length - 1);
