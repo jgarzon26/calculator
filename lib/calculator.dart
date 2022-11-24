@@ -229,7 +229,6 @@ class _CalculatorState extends State<Calculator> {
                           }else{
                             _revertToPositive();
                           }
-
                           break;
                         }
                       }
@@ -247,7 +246,13 @@ class _CalculatorState extends State<Calculator> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    _getResultFromString();
+                    if(_result.text.isNotEmpty){
+                      _expression = _result.text;
+                      setState(() {
+                        _userInput.text = _result.text;
+                      });
+                      _result.clear();
+                    }
                   },
                   child: Text("=",),
                 ),
