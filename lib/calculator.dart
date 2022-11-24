@@ -20,6 +20,8 @@ class _CalculatorState extends State<Calculator> {
   bool _hasSignChange = false;
   late int _startIndexOfSignChange;
 
+  bool _isBracketMode = false;
+
   final _listOfOperators = {
     "add" : "+",
     "subtract" : "-",
@@ -143,11 +145,24 @@ class _CalculatorState extends State<Calculator> {
                     _expression = "";
                     _result.clear();
                     _hasSignChange = false;
+                    _isBracketMode = false;
                   }),
                   child: Text("C",),
                 ),
                 ElevatedButton(
-                    onPressed: null,
+                    onPressed: () {
+                      if(num.tryParse(_expression.characters.last) != null){
+                        if(!_isBracketMode){
+                          _addOperatorInInputField("x");
+                        }
+                      }
+                      else if(num.tryParse(_expression.characters.last) == null && _isBracketMode){
+                        return;
+                      }
+                      _expression += (!_isBracketMode) ? "(" : ")";
+                      setState(() => _userInput.text += (!_isBracketMode) ? "(" : ")");
+                      _isBracketMode = !_isBracketMode;
+                    },
                     child: Text("( )"),
                 ),
                 ElevatedButton(
