@@ -85,7 +85,10 @@ class _CalculatorState extends State<Calculator> {
   void _revertToPositive(){
     var startIndex = _expression.lastIndexOf("(", _startIndexOfSignChange);
     _expression = _expression.replaceRange(startIndex, null, _currentLastNumber);
-    setState(() => _userInput.text = _expression);
+    setState(() {
+      _userInput.text = _expression;
+      _userInput.text = _userInput.text.replaceAll("*", "x").replaceAll("/", "÷");
+    });
     _hasSignChange = false;
   }
 
@@ -207,14 +210,17 @@ class _CalculatorState extends State<Calculator> {
                     bool hasFoundLastOperator = false;
                     for(int i = _expression.length - 1; i > -1; i--){
                       for(var v in _listOfOperators.values){
-                        if(_expression[i] == v || i == 0){
+                        if(_userInput.text[i] == v || i == 0){
                           hasFoundLastOperator = true;
                           if(!_hasSignChange){
                             //if there is operators add one, otherwise do nothing
                             var n = (i == 0) ? 0 : 1;
                             _currentLastNumber = _expression.substring(i+n);
                             _expression = _expression.replaceRange(i + n, null, "(-$_currentLastNumber)");
-                            setState(() => _userInput.text = _expression);
+                            setState(() {
+                              _userInput.text = _expression;
+                              _userInput.text = _userInput.text.replaceAll("*", "x").replaceAll("/", "÷");
+                            });
                             _hasSignChange = true;
                             _startIndexOfSignChange = i + n;
                           }else{
