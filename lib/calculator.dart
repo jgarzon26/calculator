@@ -34,7 +34,7 @@ class _CalculatorState extends State<Calculator> {
 
   void _addNumberInInputField(int num) {
 
-    if(_isLastNumberNegative()){
+    if(_expression.endsWith(")")){
       _addOperatorInInputField("x");
     }
 
@@ -83,8 +83,6 @@ class _CalculatorState extends State<Calculator> {
     }
   }
 
-  bool _isLastNumberNegative() => _expression.endsWith(")");
-
   void _revertToPositive(){
     var startIndex = _expression.lastIndexOf("(", _startIndexOfSignChange);
     _expression = _expression.replaceRange(startIndex, null, _currentLastNumber);
@@ -124,9 +122,8 @@ class _CalculatorState extends State<Calculator> {
             ),
             IconButton(
                 onPressed: () {
-                  if(_isLastNumberNegative()){
-                    _revertToPositive();
-                    return;
+                  if(_expression.endsWith(")")){
+                    _isBracketMode = true;
                   }
 
                   if(_checkIfInputFieldHasValue()){
