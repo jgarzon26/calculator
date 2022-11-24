@@ -49,12 +49,15 @@ class _CalculatorState extends State<Calculator> {
   }
   void _addOperatorInInputField(String oper) {
     _hasSignChange = false;
+    if(!(num.tryParse(_expression.characters.last) != null || _expression.characters.last == ")")){
+      _expression = _expression.substring(0, _expression.length - 1);
+      _userInput.text = _userInput.text.substring(0, _userInput.text.length - 1);
+    }
     switch(oper){
       case "x" : _expression += "*"; break;
       case "÷" : _expression += "/"; break;
       default: _expression += oper;
     }
-
     setState(() => _userInput.text += oper);
   }
 
